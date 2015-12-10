@@ -6,21 +6,28 @@ import (
 	"io"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
 
 func main() {
 	boxes := readinput()
-	totalsrf := 0
-	for _, box := range boxes {
-		a, b, c := box.l*box.w, box.w*box.h, box.h*box.l
-		min := min(a, b, c)
 
-		totalsrf += (2*a + 2*b + 2*c) + min
+	tsurface := 0
+	tribbon := 0
+
+	for _, box := range boxes {
+		o := []int{box.l, box.w, box.h}
+		sort.Sort(sort.IntSlice(o))
+
+		a, b, c := box.l*box.w, box.w*box.h, box.h*box.l
+		tsurface += (2*a + 2*b + 2*c) + o[0]
+		tribbon += (2*o[0] + 2*o[1]) + (box.l * box.w * box.h)
 	}
 
-	fmt.Println("total surface is: ", totalsrf, "ft^2")
+	fmt.Println("total surface is: ", tsurface, "ft^2")
+	fmt.Println("total ribbon is: ", tribbon, "ft")
 }
 
 func readinput() []*box {
@@ -74,15 +81,4 @@ func parse(line string) (*box, error) {
 
 type box struct {
 	l, w, h int
-}
-
-// not using stdlib because ¯\_(ツ)_/¯
-func min(is ...int) int {
-	min := is[0]
-	for _, i := range is[1:] {
-		if i < min {
-			min = i
-		}
-	}
-	return min
 }
