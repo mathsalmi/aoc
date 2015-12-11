@@ -11,7 +11,7 @@ func main() {
 	i, input := 0, "yzbqklnj"
 
 	hash := ""
-	for ; !strings.HasPrefix(hash, "00000"); i++ {
+	for ; !strings.HasPrefix(hash, "000000"); i++ {
 		x := md5.Sum([]byte(input + strconv.Itoa(i)))
 		hash = fmt.Sprintf("%x", x[:])
 	}
