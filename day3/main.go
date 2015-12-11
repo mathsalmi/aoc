@@ -14,7 +14,9 @@ func main() {
 
 	// houses: map[X,Y position] number of gifts
 	h := make(map[string]int)
-	s := new(santa)
+	s, rs := new(santa), new(santa) // santa and robot-santa (rb)
+
+	curr := s // either santa or rb
 
 	coords := string(bytes)
 	for _, coord := range coords {
@@ -23,25 +25,31 @@ func main() {
 		}
 
 		// first position
-		if _, key := h["0,0"]; s.x == 0 && s.y == 0 && !key {
+		if _, key := h["0,0"]; curr.x == 0 && curr.y == 0 && !key {
 			h["0,0"] = 1
 		}
 
 		// move direction
 		switch coord {
 		case '^':
-			s.y++
+			curr.y++
 		case 'v':
-			s.y--
+			curr.y--
 		case '>':
-			s.x++
+			curr.x++
 		case '<':
-			s.x--
+			curr.x--
 		default:
 			log.Fatalln("Position unknown '" + string(coord) + "'")
 		}
 
-		h[s.pos()]++
+		h[curr.pos()]++
+
+		if curr == s {
+			curr = rs
+		} else {
+			curr = s
+		}
 	}
 
 	total := 0
