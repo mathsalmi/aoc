@@ -16,5 +16,6 @@ func main() {
 		hash = fmt.Sprintf("%x", x[:])
 	}
 
+	// brute force  ¯\_(ツ)_/¯
 	fmt.Println("# is ", (i - 1), hash)
 }
