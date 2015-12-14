@@ -23,16 +23,13 @@ func main() {
 }
 
 func isStringOk(s string) bool {
-	tv := countVowels(s)
-	if tv < 3 {
+	// a pair of runes that repeat at least twice
+	if !hasPairRepeatTwice(s) {
 		return false
 	}
 
-	if !hasRepeatedRunes(s) {
-		return false
-	}
-
-	if hasString(s) {
+	// repeated runes with exactly one rune between them
+	if !hasPausedRepetition(s) {
 		return false
 	}
 
@@ -66,30 +63,29 @@ func readinput() []string {
 	return out
 }
 
-func countVowels(s string) int {
-	out, vs := 0, []string{"a", "e", "i", "o", "u"}
-	for _, v := range vs {
-		out += strings.Count(s, v)
-	}
-
-	return out
-}
-
-func hasString(s string) bool {
-	vs := []string{"ab", "cd", "pq", "xy"}
-	for _, v := range vs {
-		if strings.Contains(s, v) {
+// hasPausedRepetition tells whether or not the string
+// has runes that repeat with exactly one rune between them.
+//
+// ex.: aba or cdc or even aaa
+func hasPausedRepetition(s string) bool {
+	r := []rune(s)
+	for i := 0; i+2 < len(s); i++ {
+		if r[i] == r[i+2] {
 			return true
 		}
 	}
-
 	return false
 }
 
-func hasRepeatedRunes(s string) bool {
-	runes := []rune(s)
-	for i, r := range runes {
-		if i+1 < len(runes) && r == runes[i+1] {
+func hasPairRepeatTwice(s string) bool {
+	r := []rune(s)
+	len := len(s)
+	pair := ""
+
+	for i := 0; i < len; i++ {
+		pair = string(r[i : i+2])
+
+		if strings.Count(s, pair) >= 2 {
 			return true
 		}
 	}
