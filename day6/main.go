@@ -24,18 +24,16 @@ func doAction(items *[]*inst, lights *[1000][1000]int) {
 	for _, item := range *items {
 		for i := item.fromX; i <= item.toX; i++ {
 			for j := item.fromY; j <= item.toY; j++ {
-
 				switch item.comm {
 				case "turn on":
-					lights[i][j] = 1
+					lights[i][j]++
 				case "turn off":
-					lights[i][j] = 0
-				case "toggle":
-					if lights[i][j] == 0 {
-						lights[i][j] = 1
-					} else {
+					lights[i][j]--
+					if lights[i][j] < 0 {
 						lights[i][j] = 0
 					}
+				case "toggle":
+					lights[i][j] = lights[i][j] + 2
 				}
 			}
 		}
@@ -45,9 +43,7 @@ func doAction(items *[]*inst, lights *[1000][1000]int) {
 func numLightsLit(lights *[1000][1000]int) (out int) {
 	for _, line := range lights {
 		for _, light := range line {
-			if light == 1 {
-				out++
-			}
+			out += light
 		}
 	}
 
