@@ -15,13 +15,13 @@ func main() {
 	var lights [1000][1000]int
 
 	items := readinput()
-	doAction(items, &lights)
+	doAction(&items, &lights)
 	n := numLightsLit(&lights)
 	fmt.Println("# lights lit ", n)
 }
 
-func doAction(items []*inst, lights *[1000][1000]int) {
-	for _, item := range items {
+func doAction(items *[]*inst, lights *[1000][1000]int) {
+	for _, item := range *items {
 		for i := item.fromX; i <= item.toX; i++ {
 			for j := item.fromY; j <= item.toY; j++ {
 
