@@ -1,18 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"bytes"
+	"fmt"
+)
 
 func main() {
 	out := "1321131112"
 
-	for i := 1; i <= 40; i++ {
+	for i := 1; i <= 50; i++ {
 		out = c(out)
 	}
 
 	fmt.Println("Final length: ", len(out))
 }
 
-func c(s string) (out string) {
+func c(s string) string {
+	out := bytes.Buffer{}
 	input := []rune(s)
 	len := len(input)
 
@@ -25,8 +29,8 @@ func c(s string) (out string) {
 		}
 		i = j - 1
 
-		out += fmt.Sprintf("%d%c", count, c)
+		out.WriteString(fmt.Sprintf("%d%c", count, c))
 	}
 
-	return out
+	return out.String()
 }
