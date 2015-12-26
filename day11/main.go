@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	s := "vzbxkghb"
+	s := "vzbxxyzz"
 
 	for {
 		s = increment(s)
