@@ -8,8 +8,6 @@ import (
 	"reflect"
 )
 
-var sum = 0.0
-
 func main() {
 	data, _ := ioutil.ReadFile("input")
 	var u interface{}
@@ -19,27 +17,42 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	parse(u)
+	n, o := parse(u)
 
-	fmt.Println("Sum: ", sum)
+	fmt.Println("Sum: ", n, o)
 }
 
-func parse(v interface{}) {
+func parse(v interface{}) (n float64, hasStr bool) {
 	switch v.(type) {
 	case string:
 		// ignore
+		return 0, v.(string) == "red"
 	case float64:
-		sum += v.(float64)
+		return v.(float64), false
 	case []interface{}:
+		lsum := 0.0
 		for _, v2 := range v.([]interface{}) {
-			parse(v2)
+			n, _ := parse(v2)
+			lsum += n
 		}
+
+		return lsum, false
 	case map[string]interface{}:
+		lsum := 0.0
 		for _, v2 := range v.(map[string]interface{}) {
-			parse(v2)
+			n, hasStr := parse(v2)
+			if hasStr {
+				return 0, false
+			}
+
+			lsum += n
 		}
+
+		return lsum, false
 	default:
 		x := reflect.ValueOf(v)
 		fmt.Println("unknown ", v, x.Kind(), x.Type())
 	}
+
+	return 0, true
 }
