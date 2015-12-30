@@ -81,46 +81,29 @@ func isCorner(iline, icol int) bool {
 	return (iline == 0 && icol == 0) || (iline+1 == len && icol == 0) || (iline == 0 && icol+1 == len) || (iline+1 == len && icol+1 == len)
 }
 
+// because math.Min and math.Max use float64 and fuck type casting…
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
 func shouldTurnOn(line, col int, isOff bool) bool {
 	numneighbors := 0
-	inc := func(i, j int) {
-		if grid[i][j] == on {
-			numneighbors++
-		}
-	}
 
-	// line above
-	if line > 0 {
-		if col > 0 {
-			inc(line-1, col-1)
-		}
-
-		inc(line-1, col)
-
-		if (col + 1) < len(grid[line-1]) {
-			inc(line-1, col+1)
-		}
-	}
-
-	// same line
-	if col > 0 {
-		inc(line, col-1)
-	}
-
-	if (col + 1) < len(grid[line]) {
-		inc(line, col+1)
-	}
-
-	// next line
-	if line+1 < len(grid) {
-		if col > 0 {
-			inc(line+1, col-1)
-		}
-
-		inc(line+1, col)
-
-		if col+1 < len(grid[line+1]) {
-			inc(line+1, col+1)
+	for i := max(0, line-1); i <= min(len(grid)-1, line+1); i++ {
+		for j := max(0, col-1); j <= min(len(grid)-1, col+1); j++ {
+			if (i != line || j != col) && grid[i][j] == on {
+				numneighbors++
+			}
 		}
 	}
 
