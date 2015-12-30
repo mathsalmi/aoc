@@ -51,6 +51,12 @@ func init() {
 func step() {
 	for iline, line := range grid {
 		for icol, col := range line {
+
+			// skip on corners
+			if isCorner(iline, icol) {
+				continue
+			}
+
 			a := action{}
 			a.line = iline
 			a.col = icol
@@ -68,6 +74,11 @@ func step() {
 	for _, a := range stack {
 		grid[a.line][a.col] = a.action
 	}
+}
+
+func isCorner(iline, icol int) bool {
+	len := len(grid)
+	return (iline == 0 && icol == 0) || (iline+1 == len && icol == 0) || (iline == 0 && icol+1 == len) || (iline+1 == len && icol+1 == len)
 }
 
 func shouldTurnOn(line, col int, isOff bool) bool {
